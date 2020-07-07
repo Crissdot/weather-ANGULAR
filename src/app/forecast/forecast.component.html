@@ -1,0 +1,4 @@
+<div>
+    <h2>Pronósticos</h2>
+    <app-weather-card [weather]="weather" *ngFor="let weather of forecastService.weather$ | async"></app-weather-card>
+</div>
