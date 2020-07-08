@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Coords } from '../../structures/coords.structure';
 import { Weather } from '../../structures/weather.structure';
+import { GeolocationService } from './geolocation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,13 +18,13 @@ export class ForecastService {
 
   endpoint: string = 'https://api.openweathermap.org/data/2.5/forecast';
 
-  constructor(private http : HttpClient) {
+  constructor(private http : HttpClient, private geolocationService : GeolocationService) {
     this.weather$ = this.weatherSubject.asObservable().pipe(map(this.structureData));
 
-    this.get({
-      lat: 20.294583,
-      lon: -102.711308
+    this.geolocationService.coords$.subscribe((coords) => {
+      this.get(coords);
     });
+
   }
 
   structureData(data : any){
@@ -41,7 +42,7 @@ export class ForecastService {
         minMaxTemp : {key}
       };
 
-      if(!tempPerDay.cod || hours == 6){
+      if(!tempPerDay.cod || hours == 7){
         const source = weatherObject.weather[0];
         tempPerDay = { ...tempPerDay, ...source};
         tempPerDay.cod = source.id;

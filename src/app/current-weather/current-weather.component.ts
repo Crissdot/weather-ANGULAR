@@ -13,7 +13,7 @@ export class CurrentWeatherComponent implements OnInit {
   constructor(public weatherService : CurrentWeatherService) { }
 
   ngOnInit(): void {
-    this.weatherService.weather$.subscribe(console.log);
+    this.weatherService.weather$.subscribe();
   }
 
 }

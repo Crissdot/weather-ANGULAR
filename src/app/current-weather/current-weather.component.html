@@ -1,2 +1,2 @@
-<h2>Clima Actual</h2>
+<h2 *ngIf="weatherService.weather$ | async">Clima Actual</h2>
 <app-weather-card [@showUpElement] [weather]="weatherService.weather$ | async"></app-weather-card>

@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Coords } from '../../structures/coords.structure';
 import { Weather } from '../../structures/weather.structure';
+import { GeolocationService } from './geolocation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class CurrentWeatherService {
 
   endpoint: string = 'https://api.openweathermap.org/data/2.5/weather';
 
-  constructor(private http : HttpClient) { 
+  constructor(private http : HttpClient, private geolocationService : GeolocationService) { 
     this.weather$ = this.weatherSubject.asObservable().pipe(map((data : any)=>{
       let mainWeather = data.weather[0];
       let weather : Weather = {
@@ -29,9 +30,8 @@ export class CurrentWeatherService {
       return weather;
     }));
 
-    this.get({
-      lat: 20.294583,
-      lon: -102.711308
+    this.geolocationService.coords$.subscribe((coords) => {
+      this.get(coords);
     });
   }
 
